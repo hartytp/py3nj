@@ -1,0 +1,31 @@
+package:
+  name: py3nj
+  version: {{ environ.get("GIT_DESCRIBE_TAG", "") }}
+
+source:
+  path: ../..
+
+build:
+  number: {{ environ.get("GIT_DESCRIBE_NUMBER", 0) }}
+  string: py_{{ environ.get("GIT_DESCRIBE_NUMBER", 0) }}+git{{ environ.get("GIT_DESCRIBE_HASH", "")[1:] }}
+  script: python setup.py install
+
+# https://github.com/neda-dtu/conda_build_fort
+requirements:
+  run:
+    - python
+    - {{ pin_compatible('numpy') }}
+  build:
+    - m2w64-toolchain  # [win]
+    - libpython  # [win]
+    - python
+    - setuptools
+    - numpy-devel
+    # - {{ compiler('c') }}
+    # - {{ compiler('fortran') }}
+    # - {{ compiler('m2w64_c') }}  # [win]
+    # - {{ compiler('m2w64_fortran') }}  # [win]
+
+test:
+  imports:
+    - py3nj
